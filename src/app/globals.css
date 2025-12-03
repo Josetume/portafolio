@@ -1,0 +1,231 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== BASE ===== */
+html, body {
+  @apply bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 text-white font-sans scroll-smooth;
+  min-height: 100%;
+  height: 100%;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Scroll personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-teal-600 rounded-lg;
+}
+::-webkit-scrollbar-track {
+  @apply bg-gray-900/30 rounded-lg;
+}
+
+/* ===== TARJETAS DE TECNOLOGÍA ===== */
+.tech-card {
+  @apply w-full p-5 border border-gray-700 bg-gray-800/30 rounded-2xl 
+         shadow-lg text-center backdrop-blur-md cursor-default 
+         transition-all duration-300 relative;
+}
+.tech-card:hover {
+  @apply border-teal-400 scale-105 shadow-[0_0_25px_rgba(0,255,180,0.25)];
+}
+
+/* ===== TOOLTIP ===== */
+.tooltip {
+  @apply absolute opacity-0 group-hover:opacity-100 transition-all 
+         text-sm bg-gray-900/90 backdrop-blur-sm px-3 py-1 rounded-lg 
+         text-gray-100 shadow-xl -bottom-12 left-1/2 -translate-x-1/2 w-max pointer-events-none;
+}
+
+/* ===== BADGES ===== */
+.badge {
+  @apply inline-block bg-gray-800/30 text-teal-300 border border-teal-400/40 
+         px-4 py-1 rounded-full text-xs font-semibold uppercase tracking-wide 
+         shadow-sm backdrop-blur-sm;
+  transition: all 0.3s ease;
+}
+.badge:hover {
+  @apply shadow-[0_0_10px_rgba(0,255,180,0.35)] scale-105;
+}
+
+/* ===== BOTONES ===== */
+.button {
+  @apply px-6 py-3 rounded-xl font-semibold transition-all duration-300;
+}
+.button-primary {
+  @apply bg-teal-500 text-black hover:bg-teal-400 hover:shadow-[0_0_15px_rgba(0,255,180,0.4)];
+}
+.button-blue {
+  @apply bg-blue-400 text-black hover:bg-blue-500 hover:shadow-[0_0_15px_rgba(100,200,255,0.4)];
+}
+.button-lime {
+  @apply bg-lime-400 text-black hover:bg-lime-500 hover:shadow-[0_0_15px_rgba(180,255,100,0.4)];
+}
+.button-orange {
+  @apply bg-amber-400 text-black hover:bg-orange-400 hover:shadow-[0_0_15px_rgba(255,180,100,0.4)];
+}
+.button-secondary {
+  @apply bg-gray-800/30 text-white border border-gray-700 hover:bg-gray-700/50 hover:shadow-md;
+}
+
+/* ===== ANIMACIONES PERSONALIZADAS ===== */
+@layer utilities {
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fadeIn {
+    animation: fadeIn 0.6s ease forwards;
+  }
+}
+
+/* ===== EFECTOS PREMIUM ===== */
+.hover-glow {
+  transition: all 0.3s ease-in-out;
+}
+.hover-glow:hover {
+  filter: saturate(1.15);
+  box-shadow: 0 0 25px rgba(0,255,180,0.25);
+}
+
+/* ====================================== */
+/* 🌐 FONDO MINIMAL TECH: GRID + ONDAS */
+/* ====================================== */
+
+.circuit-lines {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: screen;
+  opacity: 1;
+}
+
+/* Grid sutil futurista */
+.circuit-lines::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,255,194,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,194,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  z-index: 1;
+}
+
+/* Ondas suaves animadas */
+.circuit-lines::after {
+  content: "";
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  top: -25%;
+  left: -25%;
+  background: radial-gradient(circle, rgba(0,255,194,0.10) 0%, transparent 60%);
+  border-radius: 50%;
+  animation: glowWave 22s ease-in-out infinite;
+  filter: blur(30px);
+  opacity: 0.35;
+  z-index: 0;
+}
+
+@keyframes glowWave {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.12) rotate(180deg); }
+  100% { transform: scale(1) rotate(360deg); }
+}
+
+/* Contenido encima */
+.app-content {
+  position: relative;
+  z-index: 10;
+}
+/* 🔹 Fondo tecnológico moderno */
+.tech-bg-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: #0a0a0f;
+}
+
+.tech-bg {
+  width: 200%;
+  height: 200%;
+  background:
+    linear-gradient(90deg, rgba(0,255,255,0.08) 1px, transparent 1px),
+    linear-gradient(rgba(0,255,255,0.08) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridMove 18s linear infinite;
+  opacity: 0.25;
+}
+
+/* 🔹 Animación suave de movimiento en cuadrícula */
+@keyframes gridMove {
+  from {
+    transform: translateY(-50px);
+  }
+  to {
+    transform: translateY(50px);
+  }
+}
+
+/* 🔹 Puntos brillando */
+.tech-bg-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(0,255,255,0.4) 2px, transparent 2px);
+  background-size: 120px 120px;
+  animation: dotsGlow 4s infinite alternate ease-in-out;
+  opacity: 0.4;
+}
+
+@keyframes dotsGlow {
+  from { opacity: 0.15; }
+  to { opacity: 0.4; }
+}
+/* ===== ContactSection extras ===== */
+
+/* Glow border wrapper */
+.glow-border {
+  position: absolute;
+  inset: -10px;
+  border-radius: 1rem;
+  background: linear-gradient(180deg, rgba(0,255,194,0.06), transparent 30%);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  pointer-events: none;
+  /* animated soft gradient */
+  background-size: 200% 200%;
+  animation: slowShift 8s linear infinite;
+  z-index: 0;
+}
+
+/* subtle background shift for glow-border */
+@keyframes slowShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Tech badge hover glow (for tailwind + extra shadow) */
+.tech-badge-glow {
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+.tech-badge-glow:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 6px 18px rgba(0,255,194,0.08);
+}
+
+/* Floating whatsapp (responsive tweak) */
+@media (max-width: 640px) {
+  a[aria-label="Enviar mensaje por WhatsApp"] span {
+    display: none;
+  }
+}
