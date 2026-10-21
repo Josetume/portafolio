@@ -1,140 +1,168 @@
 "use client";
-
-import { useState, useEffect } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
-
-// Tipo para cada item de navegación
-type NavItem = {
-  label: string;
-  href: string;
-};
-
-export default function Navbar() {
+import { useEffect, useRef, useState } from "react";
+import { Menu, X, Download, ArrowUpRight } from "lucide-react";
+import { text as t, homePath, type LocaleProps } from "@/lib/locale";
+import useActiveSection from "@/hooks/useActiveSection";
+const homeSections = [
+  "projects",
+  "experience",
+  "skills",
+  "about",
+  "contact",
+] as const;
+export default function Navbar({ locale = "es" }: LocaleProps) {
   const [open, setOpen] = useState(false);
+  const button = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
-  const [scrollWidth, setScrollWidth] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const total = document.body.scrollHeight - window.innerHeight;
-      const progress = (window.scrollY / total) * 100;
-      setScrollWidth(progress);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const navItems: NavItem[] = [
-    { label: "Inicio", href: "/" },
-    { label: "Proyectos", href: "/projects" },
-    { label: "Servicios", href: "/#services" },
-    { label: "Certificaciones", href: "/#certifications" },
-    { label: "Tech Stack", href: "/#techstack" },
-    { label: "Conectemos", href: "/#contact" },
+  const base = homePath(locale);
+  const observedSection = useActiveSection(homeSections, pathname === base);
+  const activeSection = pathname.includes("/projects")
+    ? "projects"
+    : observedSection;
+  const links = [
+    { label: t(locale, "Proyectos", "Projects"), href: `${base}#projects` },
+    {
+      label: t(locale, "Experiencia", "Experience"),
+      href: `${base}#experience`,
+    },
+    { label: t(locale, "Habilidades", "Skills"), href: `${base}#skills` },
   ];
-
-  const handleScrollTo = (href: string) => {
-    if (href.startsWith("#")) {
-      const target = document.querySelector(href);
-      target?.scrollIntoView({ behavior: "smooth" });
-    } else {
-      window.location.href = href;
-    }
-    setOpen(false);
-  };
-
+  const otherLanguage =
+    locale === "es"
+      ? `/en${pathname === "/" ? "" : pathname}`
+      : pathname.replace(/^\/en/, "") || "/";
+  useEffect(() => {
+    const close = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && open) {
+        setOpen(false);
+        button.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, [open]);
   return (
-    <nav className="fixed top-0 w-full z-50 backdrop-blur-2xl bg-gray-900/40 border-b border-gray-800/50 shadow-[0_0_25px_-4px_rgba(0,255,180,0.25)]">
-      <div className="max-w-6xl mx-auto flex justify-between items-center py-4 px-6">
-        {/* LOGO */}
-        <motion.h1
-          className="text-lg font-bold tracking-wide text-teal-300 select-none cursor-pointer hover-glow"
-          initial={{ opacity: 0, y: -5 }}
-          animate={{ opacity: 1, y: 0 }}
-          whileHover={{ scale: 1.06, textShadow: "0px 0px 8px rgba(0,255,200,0.6)" }}
-          onClick={() => handleScrollTo("#top")}
+    <header className="site-header">
+      <nav
+        className="shell navigation"
+        aria-label={t(locale, "Navegación principal", "Main navigation")}
+      >
+        <Link
+          href={base}
+          onClick={() => setOpen(false)}
+          className="wordmark"
+          aria-label={t(locale, "José Tume, inicio", "José Tume, home")}
         >
-          J. TUME
-        </motion.h1>
-
-        {/* DESKTOP NAV */}
-        <ul className="hidden md:flex gap-8 text-sm font-medium">
-          {navItems.map((item, i) => {
-            const isActive = pathname === item.href;
-            return (
-              <li key={i} className="relative group">
-                <button
-                  onClick={() => handleScrollTo(item.href)}
-                  className={`transition hover-glow ${
-                    isActive ? "text-teal-400" : "text-gray-300 hover:text-teal-400"
-                  }`}
-                >
-                  {item.label}
-                </button>
-
-                <motion.span
-                  layoutId="navbar-underline"
-                  className="absolute left-0 -bottom-1 h-[2px] bg-teal-400 rounded-full"
-                  style={{ width: isActive ? "100%" : "0%" }}
-                  transition={{ duration: 0.28 }}
-                />
-              </li>
-            );
-          })}
-        </ul>
-
-        {/* MOBILE MENU BUTTON */}
-        <button
-          onClick={() => setOpen(!open)}
-          className="md:hidden text-teal-300 hover:text-teal-200 transition hover-glow"
-        >
-          {open ? <X size={26} /> : <Menu size={26} />}
-        </button>
-      </div>
-
-      {/* MOBILE MENU */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.25 }}
-            className="md:hidden bg-gray-900/30 backdrop-blur-xl border-t border-gray-700/40 py-5 shadow-lg rounded-b-xl"
+          jt<span>.</span>
+          <span className="wordmark-name">José Tume</span>
+        </Link>
+        <div className="desktop-nav">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              aria-current={
+                activeSection === link.href.split("#")[1]
+                  ? "location"
+                  : undefined
+              }
+            >
+              {link.label}
+            </Link>
+          ))}
+          <Link
+            className="nav-contact"
+            href={`${base}#contact`}
+            aria-current={activeSection === "contact" ? "location" : undefined}
           >
-            <ul className="flex flex-col items-center gap-5 text-sm font-medium">
-              {navItems.map((item, i) => (
-                <motion.li
-                  key={i}
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                >
-                  <button
-                    onClick={() => handleScrollTo(item.href)}
-                    className={`transition hover-glow ${
-                      pathname === item.href
-                        ? "text-teal-400"
-                        : "text-gray-300 hover:text-teal-400"
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* SCROLL PROGRESS BAR */}
-      <motion.div
-        className="h-[2px] bg-gradient-to-r from-teal-400 to-teal-500 shadow-[0_0_6px_1px_rgba(0,255,180,0.6)]"
-        animate={{ width: `${scrollWidth}%` }}
-        transition={{ ease: "linear" }}
-      />
-    </nav>
+            {t(locale, "Contacto", "Contact")}
+            <ArrowUpRight size={14} />
+          </Link>
+          <a href="/CV_Jose_Tume_FullStack.pdf" download className="nav-cv">
+            <Download size={15} />
+            {t(locale, "Descargar CV", "CV (ES)")}
+          </a>
+          <Link
+            href={otherLanguage}
+            hrefLang={locale === "es" ? "en" : "es"}
+            className="language-link"
+            aria-label={t(
+              locale,
+              "Read this page in English",
+              "Leer esta página en español",
+            )}
+          >
+            {locale === "es" ? "EN" : "ES"}
+          </Link>
+        </div>
+        <div className="mobile-nav-actions">
+          <Link
+            href={otherLanguage}
+            hrefLang={locale === "es" ? "en" : "es"}
+            className="language-link"
+            aria-label={t(
+              locale,
+              "Read this page in English",
+              "Leer esta página en español",
+            )}
+          >
+            {locale === "es" ? "EN" : "ES"}
+          </Link>
+          <button
+            ref={button}
+            onClick={() => setOpen(!open)}
+            aria-label={
+              open
+                ? t(locale, "Cerrar menú", "Close menu")
+                : t(locale, "Abrir menú", "Open menu")
+            }
+            aria-expanded={open}
+            aria-controls="mobile-navigation"
+            className="icon-button"
+          >
+            {open ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
+        <div
+          id="mobile-navigation"
+          hidden={!open}
+          className="mobile-navigation"
+        >
+          {[
+            ...links,
+            { label: t(locale, "Sobre mí", "About me"), href: `${base}#about` },
+            {
+              label: t(locale, "Contacto", "Contact"),
+              href: `${base}#contact`,
+            },
+          ].map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              aria-current={
+                activeSection === link.href.split("#")[1]
+                  ? "location"
+                  : undefined
+              }
+              onClick={() => setOpen(false)}
+            >
+              {link.label}
+              <ArrowUpRight size={15} />
+            </Link>
+          ))}
+          <a
+            className="button"
+            href="/CV_Jose_Tume_FullStack.pdf"
+            download
+            onClick={() => setOpen(false)}
+          >
+            <Download size={17} />
+            {t(locale, "Descargar CV", "Download CV (Spanish)")}
+          </a>
+        </div>
+      </nav>
+    </header>
   );
 }

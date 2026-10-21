@@ -1,130 +1,97 @@
-"use client";
-
-import { motion } from "framer-motion";
+import ProjectCover from "./ProjectCover";
 import Link from "next/link";
-
-interface ProjectProps {
-  title: string;
-  description: string;
-  image: string;
-  demoUrl?: string;
-  codeUrl?: string;
-  tech: string[];
-  href?: string; // ⭐ ruta interna
-}
-
+import { ArrowUpRight, Check, Code2 } from "lucide-react";
+import type { ProjectDetail } from "@/data/project-details";
+import { text as t, projectPath, type Locale } from "@/lib/locale";
 export default function ProjectCard({
-  title,
-  description,
-  image,
-  demoUrl,
-  codeUrl,
-  tech,
-  href
-}: ProjectProps) {
-  const cardContent = (
-    <motion.div
-      whileHover={{ scale: 1.03 }}
-      transition={{ type: "spring", stiffness: 120 }}
-      className="
-        bg-gray-900/50 backdrop-blur-xl border border-gray-800 
-        hover:border-teal-400/40 hover:shadow-teal-400/20
-        rounded-2xl overflow-hidden shadow-lg transition cursor-pointer
-      "
+  project,
+  locale = "es",
+  featured = false,
+}: {
+  project: ProjectDetail;
+  locale?: Locale;
+  featured?: boolean;
+}) {
+  const mainTech =
+    project.slug === "alertaya"
+      ? ["React", "Spring Boot", "PostgreSQL"]
+      : project.tech.slice(0, 3);
+  return (
+    <article
+      className={`project-card ${featured ? "project-card-featured" : ""}`}
+      data-project={project.slug}
     >
-      {/* Imagen */}
-      <div className="h-52 overflow-hidden">
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-full object-cover hover:scale-110 transition duration-500"
-        />
-      </div>
-
-      {/* Contenido */}
-      <div className="p-6">
-        <h3 className="text-xl font-bold text-teal-400">{title}</h3>
-
-        <p className="text-gray-300 text-sm mt-2 leading-relaxed">
-          {description}
-        </p>
-
-        {/* Tecnologías */}
-        <div className="flex flex-wrap gap-2 mt-4">
-          {tech.map((t, i) => (
-            <span
-              key={i}
-              className="
-                text-xs px-3 py-1 rounded-full bg-teal-400/10 
-                border border-teal-400/30 text-teal-300
-              "
-            >
-              {t}
-            </span>
-          ))}
-        </div>
-
-        {/* Botones */}
-        <div className="flex flex-wrap gap-4 mt-6">
-
-          {/* Ver Demo */}
-          {demoUrl && (
-            <Link
-              href={demoUrl}
-              target="_blank"
-              className="
-                px-4 py-2 text-xs font-semibold rounded-lg 
-                bg-teal-500 text-black hover:bg-teal-300 transition
-              "
-              onClick={(e) => e.stopPropagation()}
-            >
-              Ver Demo
-            </Link>
-          )}
-
-          {/* Ver Código */}
-          {codeUrl && (
-            <Link
-              href={codeUrl}
-              target="_blank"
-              className="
-                px-4 py-2 text-xs font-semibold rounded-lg 
-                bg-gray-800 border border-gray-700 text-gray-300 
-                hover:bg-gray-700 hover:text-white transition
-              "
-              onClick={(e) => e.stopPropagation()}
-            >
-              Ver Código
-            </Link>
-          )}
-
-          {/* ⭐ NUEVO → Ver Detalle */}
-          {href && (
-            <Link
-              href={href}
-              className="
-                px-4 py-2 text-xs font-semibold rounded-lg 
-                bg-teal-600 text-black hover:bg-teal-400 transition
-              "
-              onClick={(e) => e.stopPropagation()}
-            >
-              Ver Detalle
-            </Link>
-          )}
-
-        </div>
-      </div>
-    </motion.div>
-  );
-
-  // Si hay href, la card completa es clickeable
-  if (href) {
-    return (
-      <Link href={href} className="block">
-        {cardContent}
+      <Link
+        href={projectPath(locale, project.slug)}
+        className="project-visual project-visual-composed"
+        aria-label={`${t(locale, "Ver proyecto", "View project")} ${project.title}`}
+      >
+        <ProjectCover project={project} locale={locale} />
       </Link>
-    );
-  }
-
-  return cardContent;
+      <div className="project-card-content">
+        <p className="eyebrow">{project.focus}</p>
+        <h3>
+          {project.title}
+          <span className="accent">.</span>
+        </h3>
+        <p className="muted project-description">{project.description}</p>
+        <dl className="project-facts">
+          <div>
+            <dt>{t(locale, "Mi aporte", "My contribution")}</dt>
+            <dd>
+              <Check size={15} aria-hidden="true" />
+              {project.contribution}
+            </dd>
+          </div>
+          <div>
+            <dt>{t(locale, "Alcance", "Scope")}</dt>
+            <dd>
+              <Code2 size={15} aria-hidden="true" />
+              {project.scope}
+            </dd>
+          </div>
+        </dl>
+        <ul
+          aria-label={t(locale, "Tecnologías principales", "Main technologies")}
+          className="flex flex-wrap gap-2 mb-6"
+        >
+          {mainTech.map((tech) => (
+            <li key={tech} className="tag">
+              {tech}
+            </li>
+          ))}
+        </ul>
+        <div className="project-card-links">
+          <Link href={projectPath(locale, project.slug)} className="text-link">
+            {t(locale, "Explorar caso", "Explore case study")}
+            <ArrowUpRight size={17} />
+          </Link>
+          {project.demo && (
+            <a
+              href={project.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="quiet-link"
+            >
+              {project.slug === "educapp"
+                ? t(locale, "Panel docente", "Teacher panel")
+                : t(locale, "Ver sitio", "Live site")}
+              <ArrowUpRight size={15} />
+            </a>
+          )}
+          {featured && project.github && (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="quiet-link"
+            >
+              GitHub
+              <ArrowUpRight size={15} />
+            </a>
+          )}
+        </div>
+      </div>
+    </article>
+  );
 }

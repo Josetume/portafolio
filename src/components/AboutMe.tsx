@@ -1,83 +1,75 @@
-"use client";
-
-import { motion } from "framer-motion";
-
-export default function AboutMe() {
+import { GraduationCap, ArrowUpRight } from "lucide-react";
+import { text as t, type LocaleProps } from "@/lib/locale";
+export default function AboutMe({ locale = "es" }: LocaleProps) {
   return (
-    <section
-      id="about"
-      className="relative py-28 px-6 text-center overflow-hidden"
-    >
-      {/* Fondo con tu imagen */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage: "url('/imgs/aboutme.jpg')", // coloca la imagen en /public/imgs/about-bg.jpg
-        }}
-      />
-
-      {/* Capa oscura para mejorar la lectura */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-
-      {/* GLOW suave decorativo */}
-      <div className="absolute inset-0 max-w-lg mx-auto blur-[120px] opacity-20 bg-teal-500/40 rounded-full pointer-events-none" />
-
-      {/* CONTENIDO */}
-      <div className="relative z-10 max-w-4xl mx-auto">
-        {/* TÍTULO */}
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-3xl md:text-4xl font-extrabold text-teal-400 mb-8"
+    <section id="about" className="section shell about-grid">
+      <div>
+        <p className="eyebrow">{t(locale, "04 / Sobre mí", "04 / About me")}</p>
+        <h2 className="section-title">
+          {t(
+            locale,
+            "Entender. Construir. Mejorar.",
+            "Understand. Build. Improve.",
+          )}
+        </h2>
+        <p className="muted">
+          {t(
+            locale,
+            "Soy José Tume, egresado técnico en Desarrollo de Sistemas de Información y estudiante de Ingeniería de Sistemas Computacionales. Mi experiencia combina desarrollo web y móvil, prácticas profesionales y soporte técnico.",
+            "I am José Tume, a technical graduate in Information Systems Development and a Computer Systems Engineering student. My experience combines web and mobile projects, a development internship and technical support.",
+          )}
+        </p>
+        <p className="muted mt-4">
+          {t(
+            locale,
+            "Me interesa comprender el problema antes de implementar, mantener el código claro y comunicar avances y bloqueos. Busco seguir creciendo como desarrollador Full Stack Junior dentro de un equipo.",
+            "I aim to understand the problem before implementing, keep code clear and communicate progress and blockers. I am looking to grow as a Junior Full Stack Developer within a team.",
+          )}
+        </p>
+        <a
+          href="/CV_Jose_Tume_FullStack.pdf"
+          download
+          className="text-link mt-6"
         >
-          Sobre mí
-        </motion.h2>
-
-        {/* PÁRRAFO 1 */}
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-gray-200 text-lg leading-relaxed"
-        >
-          Soy desarrollador de software con experiencia creando soluciones
-          completas: aplicaciones móviles en Kotlin, APIs REST robustas, paneles
-          administrativos y flujos automatizados con n8n e IA. Durante el último
-          año he construido proyectos reales para uso municipal, escolar y
-          comercial, integrando frontend, backend y base de datos en productos
-          funcionales y estables.
-        </motion.p>
-
-        {/* PÁRRAFO 2 */}
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.25 }}
-          className="text-gray-300 text-lg leading-relaxed mt-6 max-w-3xl mx-auto"
-        >
-          Me especializo en analizar problemas, diseñar arquitecturas simples pero
-          escalables y convertir requerimientos difusos en productos que realmente
-          resuelven algo. Trabajo con Android, PHP, JavaScript/TypeScript, MySQL,
-          React, n8n y Python, priorizando claridad, mantenibilidad y experiencias
-          fluidas para usuarios y administradores.
-        </motion.p>
-
-        {/* PÁRRAFO 3 */}
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.35 }}
-          className="text-gray-300 text-lg leading-relaxed mt-6 max-w-3xl mx-auto"
-        >
-          Hoy busco seguir desarrollando software que deje una mejora tangible:
-          sistemas que automaticen tareas, reduzcan tiempos, ordenen información y
-          permitan que otros trabajen mejor.
-        </motion.p>
+          {t(
+            locale,
+            "Más sobre mi perfil en el CV",
+            "More about my background in my CV (Spanish)",
+          )}
+          <ArrowUpRight size={16} />
+        </a>
+      </div>
+      <div className="education-card">
+        <GraduationCap size={25} className="accent" aria-hidden="true" />
+        <p className="eyebrow mt-4">
+          {t(locale, "Formación académica", "Education")}
+        </p>
+        <div>
+          <span className="education-status">
+            {t(locale, "En curso", "In progress")}
+          </span>
+          <h3>
+            {t(
+              locale,
+              "Ingeniería de Sistemas Computacionales",
+              "Computer Systems Engineering",
+            )}
+          </h3>
+          <p>Universidad Privada del Norte</p>
+        </div>
+        <div>
+          <span className="education-status">
+            {t(locale, "Egresado", "Graduate")}
+          </span>
+          <h3>
+            {t(
+              locale,
+              "Desarrollo de Sistemas de Información",
+              "Information Systems Development",
+            )}
+          </h3>
+          <p>IESP Simón Bolívar</p>
+        </div>
       </div>
     </section>
   );

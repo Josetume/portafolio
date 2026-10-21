@@ -1,192 +1,127 @@
-"use client";
-
-import { useState } from "react";
-import { motion } from "framer-motion";
-
-// ICONOS
-import { Code2, Smartphone, Bot, ShoppingCart, Boxes, Headphones, GraduationCap } from "lucide-react";
-
-// TIMELINE DATA
-const timeline = [
-  {
-    category: "proyectos",
-    icon: Smartphone,
-    title: "Aplicación móvil AlertaYa",
-    date: "01/09/2025 – 20/11/2025",
-    tech: "Kotlin • PHP • MySQL • JavaScript • TypeScript • HTML • CSS",
-    description: [
-      "App Android conectada a API REST con MySQL.",
-      "Envío de reportes con foto, GPS y descripción.",
-      "Panel web con dashboard, filtros y estados.",
-      "Desarrollo completo de la app, API, BD y panel admin."
-    ]
-  },
-  {
-    category: "proyectos",
-    icon: Smartphone,
-    title: "Aplicación móvil Educapp",
-    date: "15/07/2025 – 21/08/2025",
-    tech: "Kotlin • PHP • MySQL • JavaScript • TypeScript",
-    description: [
-      "App educativa con 4 juegos didácticos.",
-      "Envío automático de puntajes y tiempos.",
-      "Panel docente con resultados y filtros.",
-      "Desarrollo completo de app, API y BD."
-    ]
-  },
-  {
-    category: "proyectos",
-    icon: Bot,
-    title: "Automatización con IA — Clasificación de imágenes",
-    date: "02/07/2025 – 10/07/2025",
-    tech: "Python • n8n • Google Colab",
-    description: [
-      "Modelo básico de clasificación en Python.",
-      "Flujo automatizado en n8n.",
-      "Envío del diagnóstico por correo y WhatsApp."
-    ]
-  },
-  {
-    category: "proyectos",
-    icon: ShoppingCart,
-    title: "Sitio Web E-commerce — Componentes de Computadoras",
-    date: "05/06/2025 – 30/07/2025",
-    tech: "HTML • CSS • JavaScript • React • Firebase",
-    description: [
-      "Catálogo, login y carrito.",
-      "Conexión a Firebase para productos y usuarios."
-    ]
-  },
-  {
-    category: "proyectos",
-    icon: Boxes,
-    title: "Sistema de Inventario para Gimnasio",
-    date: "10/07/2023 – 15/08/2025",
-    tech: "Java • MySQL",
-    description: [
-      "CRUD completo, reportes y búsquedas.",
-      "Conexión con MySQL."
-    ]
-  },
-  {
-    category: "experiencia",
-    icon: Headphones,
-    title: "Teleoperador / Soporte Técnico — Covisian",
-    date: "15/06/2024 – 01/10/2024",
-    tech: "Experiencia laboral",
-    description: [
-      "Resolución de incidencias (+85%).",
-      "Gestión de casos en CRM.",
-      "Optimización de servicios y asistencia técnica."
-    ]
-  },
-  {
-    category: "educacion",
-    icon: GraduationCap,
-    title: "Instituto Simón Bolívar — Desarrollo de Sistemas de Información",
-    date: "2023 – 2025",
-    tech: "Formación profesional",
-    description: [
-      "Power BI y Excel (50h).",
-      "SQL para análisis de datos (70h).",
-      "Scrum Fundamentals Certified.",
-      "Programación con Python — Udemy."
-    ]
-  }
-];
-
-export default function Timeline() {
-  const [filter, setFilter] = useState("todo");
-
-  const filteredTimeline =
-    filter === "todo"
-      ? timeline
-      : timeline.filter((item) => item.category === filter);
-
+import { ArrowUpRight, BriefcaseBusiness, Headset } from "lucide-react";
+import { text as t } from "@/lib/locale";
+export default function Timeline({ locale = "es" }) {
+  const groups = [
+    {
+      title: t(locale, "Desarrollador web", "Web developer"),
+      company: "Idiomas ALAR · Universidades Rusia",
+      date: t(locale, "Ene — mar 2026", "Jan — Mar 2026"),
+      type: t(locale, "Prácticas por proyecto", "Project-based internship"),
+      points: [
+        t(
+          locale,
+          "Análisis de requerimientos para un sitio institucional.",
+          "Requirements analysis for an institutional website.",
+        ),
+        t(
+          locale,
+          "Implementación y ajuste de funcionalidades y vistas en WordPress.",
+          "WordPress feature and interface implementation and adjustments.",
+        ),
+        t(
+          locale,
+          "Pruebas funcionales, validación y colaboración en el despliegue.",
+          "Functional testing, validation and collaboration on deployment.",
+        ),
+      ],
+      tech: [
+        "WordPress",
+        "Git / GitHub",
+        t(locale, "Pruebas funcionales", "Functional testing"),
+      ],
+      href: "https://universidades-rusia.com/",
+      icon: BriefcaseBusiness,
+    },
+    {
+      title: t(
+        locale,
+        "Soporte técnico · Movistar",
+        "Technical support · Movistar",
+      ),
+      company: "Covisian",
+      date: t(locale, "Jun — oct 2025", "Jun — Oct 2025"),
+      type: t(locale, "Experiencia complementaria", "Supporting experience"),
+      points: [
+        t(
+          locale,
+          "Diagnóstico de incidencias, documentación de soluciones y seguimiento de tickets.",
+          "Incident diagnosis, solution documentation and ticket tracking.",
+        ),
+        t(
+          locale,
+          "Comunicación del estado de los casos y resolución de problemas técnicos.",
+          "Case status communication and technical troubleshooting.",
+        ),
+      ],
+      tech: [],
+      icon: Headset,
+    },
+  ];
   return (
-    <section className="py-20 px-6 max-w-6xl mx-auto">
-      <h2 className="text-4xl font-bold text-teal-400 text-center mb-12">
-        Mi Trayectoria Profesional
-      </h2>
-
-      {/* TABS */}
-      <div className="flex justify-center gap-3 mb-12 flex-wrap">
-        {[
-          { id: "todo", label: "Todo" },
-          { id: "proyectos", label: "Proyectos" },
-          { id: "educacion", label: "Educación" },
-          { id: "experiencia", label: "Experiencia" }
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setFilter(tab.id)}
-            className={`
-              px-5 py-2 rounded-full text-sm font-semibold border
-              transition-all duration-300
-              ${filter === tab.id
-                ? "bg-teal-500 text-black border-teal-500"
-                : "text-teal-300 border-teal-300/40 hover:bg-teal-400/10"
-              }
-            `}
-          >
-            {tab.label}
-          </button>
-        ))}
+    <section id="experience" className="section shell">
+      <div className="section-heading">
+        <div>
+          <p className="eyebrow">
+            {t(locale, "02 / Experiencia", "02 / Experience")}
+          </p>
+          <h2 className="section-title">
+            {t(
+              locale,
+              "Desarrollo en contexto real.",
+              "Development in a real setting.",
+            )}
+          </h2>
+          <p className="muted">
+            {t(
+              locale,
+              "Requerimientos, implementación y colaboración durante la entrega.",
+              "Requirements, implementation and collaboration throughout delivery.",
+            )}
+          </p>
+        </div>
       </div>
-
-      {/* LÍNEA CENTRAL GLOW */}
-      <div className="relative border-l-2 border-teal-400/20 ml-6 md:ml-0">
-        <div className="absolute top-0 left-[1px] w-[2px] h-full bg-teal-400/30 blur-sm"></div>
-
-        {/* ITEMS */}
-        {filteredTimeline.map((item, index) => {
-          const isRight = index % 2 === 0;
-          const Icon = item.icon;
-
-          return (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, x: isRight ? 50 : -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className={`
-                mb-16 flex flex-col md:flex-row items-center relative
-                ${isRight ? "md:justify-start" : "md:justify-end"}
-              `}
-            >
-              {/* PUNTO CENTRAL */}
-              <div className="absolute left-0 md:left-1/2 -translate-x-1/2 w-5 h-5 bg-teal-400 rounded-full border-4 border-gray-900 shadow-xl"></div>
-
-              {/* CARD */}
-              <div
-                className={`
-                  md:w-1/2 p-6 rounded-xl
-                  bg-gray-800/30 border border-teal-400/20
-                  shadow-[0_0_20px_rgba(20,200,180,0.2)]
-                  backdrop-blur-md
-                  ${isRight ? "md:mr-8" : "md:ml-8"}
-                  hover:shadow-[0_0_25px_rgba(20,200,180,0.35)]
-                  transition-all duration-300
-                `}
-              >
-                <div className="flex items-center gap-3 mb-1">
-                  <Icon className="w-5 h-5 text-teal-400" />
-                  <h3 className="text-xl font-bold text-white">{item.title}</h3>
-                </div>
-
-                <p className="text-sm text-teal-300 mt-1">{item.date}</p>
-                <p className="text-sm text-gray-400 mt-1">{item.tech}</p>
-
-                <ul className="mt-3 text-gray-300 space-y-1">
-                  {item.description.map((desc, i) => (
-                    <li key={i} className="text-sm leading-relaxed">• {desc}</li>
+      <div className="experience-list">
+        {groups.map((job, index) => (
+          <article
+            className={`experience-row ${index === 0 ? "experience-primary" : ""}`}
+            key={job.company}
+          >
+            <div className="experience-meta">
+              <job.icon size={21} aria-hidden="true" />
+              <p>{job.date}</p>
+              <span>{job.type}</span>
+            </div>
+            <div className="experience-content">
+              <h3>{job.title}</h3>
+              <p className="experience-company">{job.company}</p>
+              <ul>
+                {job.points.map((point) => (
+                  <li key={point}>{point}</li>
+                ))}
+              </ul>
+              {job.tech.length > 0 && (
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {job.tech.map((tech) => (
+                    <span className="tag" key={tech}>
+                      {tech}
+                    </span>
                   ))}
-                </ul>
-              </div>
-            </motion.div>
-          );
-        })}
+                </div>
+              )}
+            </div>
+            {job.href && (
+              <a
+                href={job.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-link experience-link"
+              >
+                {t(locale, "Ver sitio", "Visit website")}
+                <ArrowUpRight size={16} />
+              </a>
+            )}
+          </article>
+        ))}
       </div>
     </section>
   );
